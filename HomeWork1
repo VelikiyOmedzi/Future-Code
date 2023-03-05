@@ -1,0 +1,111 @@
+package org.future.code.homework;
+
+import java.util.Scanner;
+
+public class HomeWork1 {
+
+
+    public class University {
+        public static void main(String[] args) {
+            System.out.println("Employ teachers.");
+            System.out.println("Enter the students of Stepan Talalayev: ");
+            Teacher tc1 = new Teacher(30, "Stepan Talalayev", "PE");
+            tc1.Students();
+            tc1.Information();
+            tc1.TrainingLeson();
+            System.out.println("Enter the students of Ignat Skudarnov: ");
+            Teacher tc2 = new Teacher(21, "Ignat Skudarnov", "Programming");
+            tc2.Students();
+            tc2.Information();
+            tc2.TrainingLeson();
+            System.out.println("Enter the students of Aleksey Vodin: ");
+            Teacher tc3 = new Teacher(27, "Aleksey Vodin", "Math");
+            tc3.Students();
+            tc3.Information();
+            tc3.TrainingLeson();
+        }
+    }
+
+
+    public static class Teacher {
+        int age;
+        String name;
+        String profession;
+        Student[] students = new Student[3];
+        Scanner sc = new Scanner(System.in);
+
+        void Students() {
+            for (int i = 0; i < 3; i++) {
+                System.out.println("Enter the name of student " + (i + 1) + ":");
+                String name = sc.nextLine();
+                System.out.println("Enter age of student " + (i + 1) + ":");
+                int age = sc.nextInt();
+                System.out.println("Enter strength of student " + (i + 1) + ":");
+                int str = sc.nextInt();
+                Student st = new Student(age, name, str);
+                students[i] = st;
+                sc.nextLine();
+            }
+        }
+
+
+        void TrainingLeson() {
+            students[0].workout();
+            students[1].workout();
+            students[2].workout();
+        }
+
+        public Teacher(int newAge, String newName, String newProfession) {
+            age = newAge;
+            name = newName;
+            profession = newProfession;
+        }
+
+        void Information() {
+            System.out.println("This is group of " + name + " :");
+            students[0].Me();
+            students[1].Me();
+            students[2].Me();
+        }
+    }
+
+
+    public static class Student {
+        private int age;
+        String name;
+
+        int strength;
+
+        public Student(int newAge, String newName, int newStrength) {
+            age = newAge;
+            strength = newStrength;
+            name = newName;
+        }
+
+        void setAge(int newAge) {
+            if (newAge > 0 && newAge < 120) {
+                this.age = newAge;
+            }
+        }
+
+        int getAge() {
+            return age;
+        }
+
+        int workout() {
+            strength++;
+            System.out.println("Good workout," + name + "! Your strength is " + strength + "!");
+            return strength;
+        }
+
+        int birthday() {
+            age++;
+            System.out.println("Happy birthday," + name + "!");
+            return age;
+        }
+
+        void Me() {
+            System.out.println("My name is " + name + " i " + age + " years old. My strength is " + strength);
+        }
+    }
+}
