@@ -1,111 +1,100 @@
 package org.future.code.homework;
 
-import java.util.Scanner;
+import java.util.Objects;
+import java.util.function.Function;
 
 public class HomeWork1 {
 
+    public static class Student {
+        private String name;
 
-    public class University {
-        public static void main(String[] args) {
-            System.out.println("Employ teachers.");
-            System.out.println("Enter the students of Stepan Talalayev: ");
-            Teacher tc1 = new Teacher(30, "Stepan Talalayev", "PE");
-            tc1.Students();
-            tc1.Information();
-            tc1.TrainingLeson();
-            System.out.println("Enter the students of Ignat Skudarnov: ");
-            Teacher tc2 = new Teacher(21, "Ignat Skudarnov", "Programming");
-            tc2.Students();
-            tc2.Information();
-            tc2.TrainingLeson();
-            System.out.println("Enter the students of Aleksey Vodin: ");
-            Teacher tc3 = new Teacher(27, "Aleksey Vodin", "Math");
-            tc3.Students();
-            tc3.Information();
-            tc3.TrainingLeson();
+        private Integer grade;
+        public String announce() {
+            return name + " учиться в " + grade + " классе";
+        }
+        public Student(String name, Integer grade) {
+            this.name = name;
+            this.grade = grade;
+        }
+
+        public String getName() {
+            return name;
+        }
+        public Integer getGrade() {
+            return grade;
         }
     }
-
 
     public static class Teacher {
-        int age;
-        String name;
-        String profession;
-        Student[] students = new Student[3];
-        Scanner sc = new Scanner(System.in);
+        private String name;
+        private int stu;
+        private Student[] students  = new Student[30];
+        public String getName() {
+            return name;
+        }
+        public Student[] getStudents() {
+            return students;
+        }
+        public Teacher(String name) {
+            this.name = name;
+        }
+        public void addStudent(Student student) {
+             if (students[29] == null) {
+                 students[stu] = student;
+                 stu++;
+             }
 
-        void Students() {
-            for (int i = 0; i < 3; i++) {
-                System.out.println("Enter the name of student " + (i + 1) + ":");
-                String name = sc.nextLine();
-                System.out.println("Enter age of student " + (i + 1) + ":");
-                int age = sc.nextInt();
-                System.out.println("Enter strength of student " + (i + 1) + ":");
-                int str = sc.nextInt();
-                Student st = new Student(age, name, str);
-                students[i] = st;
-                sc.nextLine();
+        }
+        public String[] rollCall() {
+            int g = 0;
+            for (int i = 0; i < students.length; i++) {
+                if(students[i] == null) break;
+                g++;
             }
-        }
-
-
-        void TrainingLeson() {
-            students[0].workout();
-            students[1].workout();
-            students[2].workout();
-        }
-
-        public Teacher(int newAge, String newName, String newProfession) {
-            age = newAge;
-            name = newName;
-            profession = newProfession;
-        }
-
-        void Information() {
-            System.out.println("This is group of " + name + " :");
-            students[0].Me();
-            students[1].Me();
-            students[2].Me();
+            String[] calls = new String[g];
+            for (int i = 0; i < students.length; i++) {
+                if(students[i] == null) break;
+                calls[i] = students[i].announce();
+            }
+            return calls;
         }
     }
+    public static void main(String[] args) {
 
+        var student = new Student(STUDENT_NAME, STUDENT_GRADE);
+        print("Student: Студент создался", true);
+        print("Student: Геттер имени", Objects.equals(student.getName(), STUDENT_NAME));
+        print("Student: Геттер класса", Objects.equals(student.getGrade(), STUDENT_GRADE));
+        print("Student: announce содержит имя", student.announce().contains(STUDENT_NAME));
+        print("Student: announce содержит класс", student.announce().contains(STUDENT_GRADE.toString()));
 
-    public static class Student {
-        private int age;
-        String name;
+        var teacher = new Teacher(TEACHER_NAME);
+        print("Teacher: Уичтель создался", true);
+        print("Teacher: Геттер имени", teacher.getName() == TEACHER_NAME);
+        print("Teacher: Геттер студентов", teacher.getStudents() != null);
+        print("Teacher: Массив учеников должен быть размером 30", teacher.getStudents().length == 30);
 
-        int strength;
-
-        public Student(int newAge, String newName, int newStrength) {
-            age = newAge;
-            strength = newStrength;
-            name = newName;
-        }
-
-        void setAge(int newAge) {
-            if (newAge > 0 && newAge < 120) {
-                this.age = newAge;
-            }
-        }
-
-        int getAge() {
-            return age;
-        }
-
-        int workout() {
-            strength++;
-            System.out.println("Good workout," + name + "! Your strength is " + strength + "!");
-            return strength;
-        }
-
-        int birthday() {
-            age++;
-            System.out.println("Happy birthday," + name + "!");
-            return age;
-        }
-
-        void Me() {
-            System.out.println("My name is " + name + " i " + age + " years old. My strength is " + strength);
-        }
+        teacher.addStudent(student);
+        print("Teacher: Студент сохранился в массив", teacher.getStudents()[0] == student);
+        String[] calls = teacher.rollCall();
+        print("Teacher: Массив rollCall состоит из одиного элемента", calls.length == 1);
+        print("Teacher: В строке содержится имя студента", calls[0].contains(STUDENT_NAME));
     }
+
+    private static void print(String condition, Boolean act) {
+        Function<String, String> yellow = str -> "\u001B[33m" + str + "\u001B[0m";
+        System.out.print( "TEST CASE " + yellow.apply(constLen(condition, 55)));
+        if (act) System.out.print("✅"); else System.out.print("❌");
+        System.out.println();
+    }
+
+    private static String constLen(String str, int len) {
+        StringBuilder sb = new StringBuilder(str);
+        while (len-- - str.length() > 0) sb.append(" ");
+        return sb.toString();
+    }
+
+    private final static String STUDENT_NAME = "NameStudent";
+    private final static String TEACHER_NAME = "NameStudent";
+    private final static Integer STUDENT_GRADE = 1;
 }
