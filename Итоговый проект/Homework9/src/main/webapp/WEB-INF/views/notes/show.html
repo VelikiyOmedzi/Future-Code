@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Note</title>
+	</head>
+	<body>
+		<p th:text ="${note.getNote()}">NOTE</p>
+		<p th:text ="${note.getID()}">ID</p>
+		<a th:href="@{/notes/{if}/edit(if=${note.getIf()})}">Edit</a>
+		<form th:method="DELETE" th:action="@{/notes{id}(id=${note.getId()})}">
+			<input type = "submit" value="Delete"/>
+		</form>
+	</body>
+</html>
