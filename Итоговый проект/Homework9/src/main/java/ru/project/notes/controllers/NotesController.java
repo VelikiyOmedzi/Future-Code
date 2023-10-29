@@ -27,7 +27,7 @@ public class NotesController {//контролер наших заметок
 	@GetMapping()
 	public String index(Model model) {//возращает индекс
 		model.addAttribute("notes", webNoteDAO.index());
-		return "notex/index";
+		return "notes/index";
 	}
 	@GetMapping("/{id}")
 	public String show(@PathVariable("id") int id,Model model) {//возвращает данные по id и model
@@ -35,32 +35,29 @@ public class NotesController {//контролер наших заметок
 		return "notes/show";
 	}
 	
-	@PostMapping()
-	public String create(@RequestParam("note") String note,Model model) {
-		WebNote webNote = new WebNote();
-		webNote.setNote(note);
-		return "success Page";
-	}
 	@GetMapping("/new")
-	public String newNote(Model model) {
+	public String newNote(Model model) {//yjdfz pfvtnrf
 		model.addAttribute("webNote",new WebNote());
 		return "notes/new";
 	}
 	@PostMapping()
-	public String create(@ModelAttribute("WebNote") WebNote webNote) {//cjplfybt pfvtnrb
+	public String create(@ModelAttribute("webNote") WebNote webNote) {//щздание новой заметки
 		webNoteDAO.save(webNote);
 		return "redirect:/notes";
 	}
+
 	@GetMapping("/{id}/edit")
-	public String edit(Model model,@PathVariable("id") int id) {//изменение заметки
-		model.addAttribute("WebNote",webNoteDAO.show(id));
+	public String edit(Model model, @PathVariable("id") int id) {//изменение заметки
+		model.addAttribute("webNote",webNoteDAO.show(id));
 		return "notes/edit";
 	}
+
 	@PatchMapping("/{id}")
-	public String update(@ModelAttribute("WebNote") WebNote webNote, @PathVariable("id") int id) {//обновление заметки
-		webNoteDAO.update(id,webNote);
-		return "redirect/notes";
+	public String update(@ModelAttribute("webNote") WebNote webNote, @PathVariable("id") int id) {//обновление заметки
+		webNoteDAO.update(id, webNote);
+		return "redirect:/notes";
 	}
+
 	
 	@DeleteMapping("/{id}")
 	public String delete(@PathVariable("id") int id) {//удаление заметки
